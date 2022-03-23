@@ -6,12 +6,13 @@ import Condicional from './components/exemplos/renderizacaoCondicional'
 import Listas from './components/exemplos/listas'
 import Formulario from './components/exemplos/formulario/formulario'
 import Formulario2 from './components/exemplos/formulario/formulario2'
+import BiscoitoSorte from './components/exemplos/biscoitoSorte'
 
 export default class App extends Component {
     render () {
         return (
             <div>
-               <Formulario />
+               <BiscoitoSorte />
             </div>
         )
     }
