@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import './App.css';
 
@@ -11,10 +11,16 @@ function App() {
 
   const [input, setInput] = useState('')
 
-  function adicionarTarefas(){
+  useEffect(() => {
+    localStorage.setItem('tarefas', JSON.stringify(tarefas))
+  }, [tarefas]) // similar ao componentDidUpdate
+
+  const adicionarTarefas = useCallback(() => {
     setTarefas([...tarefas, input])
     setInput('')
-  }
+  }, [input, tarefas])
+
+  const totalTarefas = useMemo(() => tarefas.length, [tarefas]) //toda vez que modificar tarefas, irá retornar tarefas.length
 
 
   return (
@@ -24,7 +30,8 @@ function App() {
         {tarefas.map(tarefa => (
           <li key={tarefa}>{tarefa}</li>
         ))}
-      </ul>
+      </ul><br />
+      <p>Você tem {totalTarefas} tarefas!</p>
       <input type='text' value={input} onChange={e => setInput(e.target.value) } />
       <button onClick={adicionarTarefas}>Adicionar</button>
     </div>
