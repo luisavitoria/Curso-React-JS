@@ -4,10 +4,12 @@ import './index.css';
 import App from './App';
 import RequisicaoHTTP from './http/requisicaohttp'
 
+import AppRoutes from './AppRoutes'
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <RequisicaoHTTP />
+    <AppRoutes />
   </React.StrictMode>,
   document.getElementById('root')
 );
