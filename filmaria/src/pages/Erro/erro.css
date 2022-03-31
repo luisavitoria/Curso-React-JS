@@ -1,0 +1,13 @@
+.erro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.erro a {
+    text-decoration: none;
+    color: #fff;
+    background-color: brown;
+    padding: 10px;
+}
