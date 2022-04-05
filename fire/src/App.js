@@ -9,6 +9,8 @@ function App() {
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+  const [user, setUser] = useState(false)
+  const [userLogged, setUserLogged] = useState({})
   
   useEffect(()=> {
     async function loadPosts() {
@@ -31,6 +33,27 @@ function App() {
   
   },[])
   
+  useEffect(() => {
+
+    async function checkLogin() {
+      await firebase.auth().onAuthStateChanged((user) => { //monitora se existe um usuario logado ou nao
+        if(user) { //se existe um usuario logado
+          setUser(true)
+          setUserLogged({
+            uid: user.uid,
+            email: user.email
+          })
+        }else {
+          //nao possui usuario logado
+          setUser(false)
+          setUserLogged({})
+        }
+      })
+    }
+
+    checkLogin()
+
+  }, [])
 
   async function handleAdd() {
     await firebase.firestore().collection('posts')
@@ -126,11 +149,32 @@ function App() {
       }
     })
   }
+
+  async function logout() {
+    await firebase.auth().signOut()
+  }
+
+  async function fazerLogin(){
+    await firebase.auth().signInWithEmailAndPassword(email, senha)
+    .then((value)=>{
+      console.log(value.user);
+    })
+    .catch((error)=>{
+      console.log('ERRO AO FAZER O LOGIN' + error);
+    })
+  }
   
 
   return (
     <div>
       <h1>REACT JS + FIREBASE</h1>
+
+      {user && ( //se tiver um usuario logado (user=true)
+        <div> 
+          <storng>Seja bem vindo! (Você está logado)</storng><br/>
+          <span>{userLogged.uid}  {userLogged.email}</span>
+        </div>
+      )}
 
       <div>
         <h2>Cadastro:</h2>
@@ -142,6 +186,9 @@ function App() {
         <input type='password' value={senha} onChange={e => setSenha(e.target.value)}/> <br/> <br/>
 
         <button onClick={ cadastrarUsuario }>Cadastrar</button>
+        <button onClick={ fazerLogin }>Fazer Login</button>
+        <button onClick={ logout }>Sair da conta</button>
+  
       </div>
 
       <div>
@@ -194,3 +241,4 @@ await firebase.firestore().collection('posts')
 
 // erros:
 // https://firebase.google.com/docs/reference/js/v8/firebase.auth.Auth#createuserwithemailandpassword
+
